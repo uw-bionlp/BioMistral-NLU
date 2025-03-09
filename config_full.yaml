@@ -1,0 +1,86 @@
+# Model arguments
+model_name_or_path: BioMistral/BioMistral-7B-DARE
+model_revision: main
+torch_dtype: bfloat16
+use_flash_attention_2: true
+
+# Data training arguments
+chat_template: "{% for message in messages %}\n{% if message['role'] == 'user' %}\n{{ '<|user|>\n' + message['content'] + eos_token }}\n{% elif message['role'] == 'system' %}\n{{ '<|system|>\n' + message['content'] + eos_token }}\n{% elif message['role'] == 'assistant' %}\n{{ '<|assistant|>\n'  + message['content'] + eos_token }}\n{% endif %}\n{% if loop.last and add_generation_prompt %}\n{{ '<|assistant|>' }}\n{% endif %}\n{% endfor %}"
+dataset_mixer:
+  # /dataset/raw/wiki_medical_terms: 1.0
+  # /dataset/raw/medical_chat: 0.05
+  # /dataset/raw/medical_knowledge: 1.0
+  /dataset/final/train/DC/2006smoker: 1.0
+  /dataset/final/train/DC/2008obesity: 1.0
+  /dataset/final/train/DC/2018cohort: 1.0
+  /dataset/final/train/DC/2024SemEval: 1.0
+  /dataset/final/train/DC/Reason2StopQA: 1.0
+  /dataset/final/train/DC/MTSample: 1.0
+  /dataset/final/train/DC/CZI_DRSM: 1.0
+  /dataset/final/train/NLI/snli: 0.03
+  /dataset/final/train/NLI/multinli: 0.03
+  /dataset/final/train/NLI/BioNLI: 1.0
+  /dataset/final/train/STS/STS-B: 1.0
+  /dataset/final/train/summarization/CDSR: 1.0
+  /dataset/final/train/summarization/PubMedSum: 1.0
+  /dataset/final/train/summarization/AciDemo: 1.0
+  /dataset/final/train/events/DrugProt: 1.0
+  /dataset/final/train/events/BioRed: 1.0
+  /dataset/final/train/events/tmVar: 1.0
+  /dataset/final/train/events/NLM-Gene: 1.0
+  /dataset/final/train/events/GNormPlus: 1.0
+  /dataset/final/train/events/2006deid: 1.0
+  /dataset/final/train/events/2009medication: 1.0
+  /dataset/final/train/events/2011coreference: 1.0
+  /dataset/final/train/events/2012temporal: 1.0
+  /dataset/final/train/events/2014PHI: 1.0
+  /dataset/final/train/events/2018ade: 1.0
+  /dataset/final/train/events/2022sdoh: 1.0
+  /dataset/final/train/events/GENIA: 1.0
+  /dataset/final/train/events/linnaeus: 1.0
+  /dataset/final/train/events/BC4CHEMD: 1.0
+  /dataset/final/train/events/PICO-data: 1.0
+  /dataset/final/train/events/PubMedPICO: 1.0
+  /dataset/final/train/events/ClinicalIE_medication_attr: 1.0
+  /dataset/final/train/events/ClinicalIE_medication_status: 1.0
+  /dataset/final/train/RE/DrugProt: 1.0
+  /dataset/final/train/RE/BioRed: 1.0
+  /dataset/final/train/RE/2011coreference: 0.24
+  /dataset/final/train/RE/2012temporal: 1.0
+  /dataset/final/train/RE/euadr: 1.0
+
+dataset_splits:
+- train
+- test
+preprocessing_num_workers: 2
+
+# SFT trainer config
+bf16: true
+do_eval: false
+evaluation_strategy: epoch
+gradient_accumulation_steps: 1
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: False
+hub_strategy: every_save
+learning_rate: 2.0e-05
+log_level: info
+logging_steps: 5  
+logging_strategy: steps
+lr_scheduler_type: cosine
+max_seq_length: 2048
+max_steps: -1
+num_train_epochs: 2
+output_dir: experiment/BioMistral_full
+overwrite_output_dir: true
+per_device_eval_batch_size: 8
+per_device_train_batch_size: 16
+push_to_hub: false
+remove_unused_columns: true
+report_to:
+- tensorboard
+save_strategy: "epoch"
+save_steps: 500
+save_total_limit: 3
+seed: 42
+warmup_ratio: 0.1
