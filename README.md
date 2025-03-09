@@ -1,5 +1,5 @@
 # BioMistral-NLU
-Code for the paper 'BioMistral-NLU: Towards More Generalizable Medical Language Understanding through Instruction Tuning'.'
+Dataset and Code for the paper '[BioMistral-NLU: Towards More Generalizable Medical Language Understanding through Instruction Tuning](https://arxiv.org/pdf/2410.18955)'.'
 
 ![Instruction-tuning dataset (MNLU-Instruct),system development, and downstream evaluation for BioMistral-NLU..](system.jpg)
 
